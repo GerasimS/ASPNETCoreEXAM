@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ASPNetCoreExam.Models.StreamingPlatform>
+
+@{
+    ViewData["Title"] = "Index";
+    var UnSortedList = new List<StreamingPlatform>();
+    var list = new List<StreamingPlatform>();
+    var counter = 0;
+}
+
+<h1>Streaming platforms</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@foreach (var item in Model)
+{
+
+    UnSortedList.Add(item);
+    list = UnSortedList.OrderByDescending(o => o.Date).ToList();
+}
+
+@while (counter < list.Count && list.Count != 0)
+{
+    <div class="row pb-0 d-flex">
+        @do
+        {
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <a asp-action="Details" asp-route-id="@list[counter].ID"><picture> <img src="@("~/image/" + list[counter].ImageName)" asp-for="Name" asp-append-version="true" width="100%" height="100%"> </picture> </a>
+                    <div class="card-body">
+                        <p class="card-text">@list[counter].Name</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a asp-action="Edit" asp-route-id="@list[counter].ID" type="button" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@list[counter].ID" type="button" class="btn btn-sm btn-outline-secondary">Delete</a>
+                            </div>
+                            <small class="text-muted">@list[counter].Date.ToString("dd/M/yyyy").Replace("/",".")</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            counter++;
+        } while (counter % 3 < 3 && counter % 3 != 0 && counter < list.Count);
+    </div>
+    <br />
+}
+
+
+
